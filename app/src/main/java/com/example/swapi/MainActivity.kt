@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.swapi.modelo.Respuesta
 import com.example.swapi.modelo.Starship
+import com.example.swapi.ui.StarWarsNavesApp
 import com.example.swapi.ui.StarWarsUIState
 import com.example.swapi.ui.StarWarsViewModel
 import com.example.swapi.ui.theme.SwapiTheme
@@ -43,11 +44,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SwapiTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PantallaDatos(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                StarWarsNavesApp()
             }
         }
     }
@@ -55,16 +52,17 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PantallaDatos(modifier: Modifier = Modifier,
-                  viewModel: StarWarsViewModel = viewModel(factory = StarWarsViewModel.Factory)
+                  viewModel: StarWarsViewModel = viewModel(factory = StarWarsViewModel.Factory),
+                  onSucess: () -> Unit
 ) {
     val starWarsUIState = viewModel.starWarsUIState
 
     when(starWarsUIState) {
         is StarWarsUIState.Cargando -> PantallaCargando(modifier = modifier.fillMaxSize())
-        is StarWarsUIState.Success -> PantallaSuccess(
+        is StarWarsUIState.Success -> onSucess()/*PantallaSuccess(
             respuesta = starWarsUIState.respuesta,
             modifier = modifier.fillMaxSize()
-        )
+        )*/
         is StarWarsUIState.Error -> PantallaError(modifier = modifier.fillMaxWidth())
     }
 }
@@ -88,13 +86,13 @@ fun PantallaError(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PantallaSuccess(respuesta: Respuesta, modifier: Modifier = Modifier) {
+fun PantallaSuccess(respuesta: Respuesta, modifier: Modifier = Modifier, onNavePulsado: () -> Unit) {
     LazyColumn(modifier = modifier) {
         items(respuesta.resultados) { starship ->
             var mostrarDialogo by remember { mutableStateOf(false) }
             Card(modifier = Modifier
                 .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
-                .clickable { mostrarDialogo = true }) {
+                .clickable { /*mostrarDialogo = true*/}) {
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = starship.nombre,
@@ -129,14 +127,14 @@ fun PantallaSuccess(respuesta: Respuesta, modifier: Modifier = Modifier) {
                         }
                     }
                 }*/
-                ListarNaves(starship)
+                ListarPeliculas(starship)
             }
         }
     }
 }
 
 @Composable
-fun ListarNaves(starship: Starship){
+fun ListarPeliculas(starship: Starship){
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         for(pelicula in starship.peliculas) {
             Text(

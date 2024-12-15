@@ -4,4 +4,6 @@
     <string name="error_de_conexion">Error de conexion</string>
     <string name="inicio">Inicio</string>
     <string name="lista_naves">Lista Naves</string>
+    <string name="atras">atras</string>
+    <string name="success">success\n</string>
 </resources>
